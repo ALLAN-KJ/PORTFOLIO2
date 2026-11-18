@@ -1,61 +1,34 @@
 import type { Metadata, Viewport } from 'next';
-import { Syne, Anton, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
-import { cn } from "@/lib/utils";
-
-const syne = Syne({
-  weight: ['700', '800'],
-  subsets: ['latin'],
-  variable: '--font-syne',
-  display: 'swap',
-});
-
-const anton = Anton({
-  weight: '400',
-  subsets: ['latin'],
-  variable: '--font-anton',
-  display: 'swap',
-});
-
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-sans',
-  display: 'swap',
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-mono',
-  display: 'swap',
-});
+import { cn } from "@/src/lib/utils";
 
 export const metadata: Metadata = {
-  title: 'ALLAN K. J • Cybersecurity & Software Engineering',
+  title: 'Allan K. J — Software & Security Engineering Portfolio',
   description:
-    'Second-year Computer Science student specializing in Cybersecurity at Karunya University. Experienced in enterprise IT security at ZF Group and rapid full-stack product delivery.',
+    'Allan K. J | B.Tech Computer Science & Engineering (Cybersecurity Specialisation), Karunya University. Enterprise IT Security at ZF Group, Conesta Forge, Smart India Hackathon finalist.',
   keywords: [
     'Allan K. J',
+    'URK25CS6018',
     'Cybersecurity',
-    'Software Engineering',
+    'Software Engineer',
+    'Full-Stack Developer',
     'Karunya University',
-    'Coimbatore',
     'ZF Group',
-    'Tool Finder',
     'Conesta Forge',
+    'Smart India Hackathon',
+    'Three.js',
   ],
-  authors: [{ name: 'ALLAN K. J' }],
+  authors: [{ name: 'Allan K. J' }],
   openGraph: {
-    title: 'ALLAN K. J • Cybersecurity & Software Engineering',
+    title: 'Allan K. J — Software & Security Engineering Portfolio',
     description:
-      'Second-year Computer Science student specializing in Cybersecurity at Karunya University. Experienced in enterprise IT security at ZF Group and rapid full-stack product delivery.',
+      'High-contrast engineering showcase for Allan K. J — featuring enterprise cybersecurity experience, projects, and 3D architectural design.',
     type: 'website',
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0A0C10',
+  themeColor: '#0B0B0D',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
@@ -69,26 +42,26 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={cn(
         "dark",
-        "bg-[#0A0C10]",
-        "text-[#F4F4EE]",
-        "antialiased",
-        syne.variable,
-        anton.variable,
-        plusJakartaSans.variable,
-        jetbrainsMono.variable
+        "bg-[#0B0B0D]",
+        "text-[#F4F4F6]",
+        "antialiased"
       )}
     >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="font-sans min-h-[100dvh] bg-[#0A0C10] text-[#F4F4EE] overflow-x-clip selection:bg-[#D19A4C] selection:text-[#0A0C10]">
+      <body
+        suppressHydrationWarning
+        className="font-sans min-h-[100dvh] bg-[#0B0B0D] text-[#F4F4F6] overflow-x-clip selection:bg-[#F4F4F6] selection:text-[#0B0B0D]"
+      >
         {children}
       </body>
     </html>

@@ -1,73 +1,92 @@
 'use client';
 
-import React from 'react';
-import SmoothScrollProvider from '@/src/components/providers/SmoothScrollProvider';
-import TopographicBg from '@/src/components/canvas/TopographicBg';
-import GuidingFlowLine from '@/src/components/visuals/GuidingFlowLine';
-import CustomCursor from '@/src/components/visuals/CustomCursor';
+import React, { useState, useRef, useEffect } from 'react';
+import Lenis from 'lenis';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
 import Navbar from '@/src/components/layout/Navbar';
-import Hero from '@/src/components/sections/Hero';
-import VelocityRibbon from '@/src/components/sections/VelocityRibbon';
-import Experience from '@/src/components/sections/Experience';
-import Projects from '@/src/components/sections/Projects';
-import Skills from '@/src/components/sections/Skills';
-import Credentials from '@/src/components/sections/Credentials';
-import Education from '@/src/components/sections/Education';
-import Footer from '@/src/components/sections/Footer';
+import HeroSection from '@/src/components/sections/HeroSection';
+import ExperienceSection from '@/src/components/sections/ExperienceSection';
+import Section04ProjectsPinned from '@/src/components/sections/Section04ProjectsPinned';
+import SkillsSection from '@/src/components/sections/SkillsSection';
+import CredentialsSection from '@/src/components/sections/CredentialsSection';
+import ContactSection from '@/src/components/sections/ContactSection';
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function Home() {
+  const [lenisReady, setLenisReady] = useState<Lenis | null>(null);
+  const lenisRef = useRef<Lenis | null>(null);
+
+  // Initialize Lenis hooked into GSAP's single animation loop
+  useEffect(() => {
+    const lenis = new Lenis({
+      lerp: 0.08,
+      duration: 1.2,
+      smoothWheel: true,
+      wheelMultiplier: 0.95,
+      touchMultiplier: 1.5,
+      autoRaf: false, // Critical: single RAF loop synchronized with GSAP ticker
+    });
+    lenisRef.current = lenis;
+    setLenisReady(lenis);
+
+    const onScroll = () => {
+      ScrollTrigger.update();
+    };
+    lenis.on('scroll', onScroll);
+
+    const tickerCb = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+
+    gsap.ticker.add(tickerCb);
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      gsap.ticker.remove(tickerCb);
+      lenis.off('scroll', onScroll);
+      lenis.destroy();
+      lenisRef.current = null;
+    };
+  }, []);
+
   return (
-    <SmoothScrollProvider>
-      <main className="relative min-h-[100dvh] w-full overflow-x-clip bg-[#0A0C10] text-[#F4F4EE]">
-        {/* Animated Topographic Contour Canvas */}
-        <TopographicBg />
+    <div className="relative min-h-[100dvh] w-full bg-[#0B0B0D] text-[#F4F4F6] overflow-x-clip selection:bg-[#F4F4F6] selection:text-[#0B0B0D]">
+      {/* 1. Top Minimal Navbar */}
+      <Navbar />
 
-        {/* Continuous S-Curved Water Flow Guiding Stream */}
-        <GuidingFlowLine />
+      {/* 2. Main Flow */}
+      <main className="relative z-10 w-full flex flex-col">
+        {/* Section 01: Hero (Vertical 100vh, 2-column with scoped 3D Canvas) */}
+        <HeroSection />
 
-        {/* Custom Magnetic Cursor */}
-        <CustomCursor />
+        {/* Section 02: Experience (Vertical, 3 clean cards) */}
+        <ExperienceSection />
 
-        {/* Top Architectural Navigation */}
-        <Navbar />
+        {/* Section 03: Projects (Pinned horizontal track on desktop >= 768px) */}
+        <Section04ProjectsPinned lenis={lenisReady} />
 
-        {/* 1. Signature Lando 3-Layer Sandwich Hero with Depth Scale Exit Scrub */}
-        <Hero />
+        {/* Section 04: Skills (Vertical, 3 categorized rows) */}
+        <SkillsSection />
 
-        {/* 2. Velocity-Reactive Gold Marquee Ribbon inside dedicated structural wrapper */}
-        <div className="relative w-full py-12 my-8 overflow-hidden">
-          <VelocityRibbon
-            angle="-rotate-2"
-            text="CYBERSECURITY • FULL-STACK ENGINEERING • ZF GROUP IT SECURITY • CONESTA FORGE #33 • SMART INDIA HACKATHON 2026 • RED HAT LINUX • CISCO IOT • GROQ AI • THREE.JS & GSAP"
-          />
-        </div>
+        {/* Section 05: Certifications & Competitions (Vertical, 2 columns) */}
+        <CredentialsSection />
 
-        {/* 3. Experience: Overlapping Hero with Top Overlap & Bottom-Right Bezier Connector */}
-        <Experience />
-
-        {/* 4. Selected Projects: Long Horizontal Glide Track with 3-Layer Parallax & Bottom-Right Exit Morph */}
-        <Projects />
-
-        {/* 5. Technical Skills Arsenal Matrix: Direct Spatial Handoff from Projects */}
-        <Skills />
-
-        {/* 6. Secondary Velocity Ribbon */}
-        <VelocityRibbon
-          angle="rotate-1"
-          direction="right"
-          text="ENTERPRISE LINUX • DOCKER CONTAINERIZATION • API INTEGRATIONS • SYSTEM DESIGN • DEFENSIVE SECURITY • RAPID PROTOTYPING"
-          className="my-16"
-        />
-
-        {/* 7. Certifications & Hackathons Credentials Matrix: Staggered Scrub Along Z/Y */}
-        <Credentials />
-
-        {/* 8. Education Strip */}
-        <Education />
-
-        {/* 9. Full-Bleed Lando Gold Footer: Rising Curved Curtain Reveal */}
-        <Footer />
+        {/* Section 06: Contact (Vertical, direct email copy + links) */}
+        <ContactSection />
       </main>
-    </SmoothScrollProvider>
+
+      {/* Minimal Footer */}
+      <footer className="w-full py-8 px-6 border-t border-[#232329] bg-[#0B0B0D]">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#9A9AA4]">
+          <p>© 2026 Allan K. J. All rights reserved.</p>
+          <p>Karunya Institute of Technology & Sciences</p>
+        </div>
+      </footer>
+    </div>
   );
 }
