@@ -21,7 +21,7 @@ export default function Home() {
   const [lenisReady, setLenisReady] = useState<Lenis | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
 
-  // Initialize Lenis hooked into GSAP's single animation loop
+  // ── Lenis + GSAP single RAF loop ─────────────────────────────────────────
   useEffect(() => {
     const lenis = new Lenis({
       lerp: 0.08,
@@ -29,20 +29,15 @@ export default function Home() {
       smoothWheel: true,
       wheelMultiplier: 0.95,
       touchMultiplier: 1.5,
-      autoRaf: false, // Critical: single RAF loop synchronized with GSAP ticker
+      autoRaf: false,
     });
     lenisRef.current = lenis;
     setLenisReady(lenis);
 
-    const onScroll = () => {
-      ScrollTrigger.update();
-    };
+    const onScroll = () => ScrollTrigger.update();
     lenis.on('scroll', onScroll);
 
-    const tickerCb = (time: number) => {
-      lenis.raf(time * 1000);
-    };
-
+    const tickerCb = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tickerCb);
     gsap.ticker.lagSmoothing(0);
 
@@ -54,37 +49,93 @@ export default function Home() {
     };
   }, []);
 
+  // ── Section entrance animations (GSAP ScrollTrigger) ─────────────────────
+  useEffect(() => {
+    // Respect prefers-reduced-motion
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+
+    const ctx = gsap.context(() => {
+      // Section headings — slide up
+      gsap.utils.toArray<Element>('.reveal-heading').forEach((el) => {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 28 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.65,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 88%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
+      });
+
+      // Cards — staggered fade-up
+      gsap.utils.toArray<Element>('.reveal-card').forEach((el) => {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.55,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 90%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
+      });
+
+      // Sections — subtle fade
+      gsap.utils.toArray<Element>('.reveal-section').forEach((el) => {
+        gsap.fromTo(
+          el,
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: 0.5,
+            ease: 'power1.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 92%',
+              toggleActions: 'play none none none',
+            },
+          }
+        );
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <div className="relative min-h-[100dvh] w-full bg-[#0B0B0D] text-[#F4F4F6] overflow-x-clip selection:bg-[#F4F4F6] selection:text-[#0B0B0D]">
-      {/* 1. Top Minimal Navbar */}
+      {/* Navbar */}
       <Navbar />
 
-      {/* 2. Main Flow */}
+      {/* Main content */}
       <main className="relative z-10 w-full flex flex-col">
-        {/* Section 01: Hero (Vertical 100vh, 2-column with scoped 3D Canvas) */}
         <HeroSection />
-
-        {/* Section 02: Experience (Vertical, 3 clean cards) */}
         <ExperienceSection />
-
-        {/* Section 03: Projects (Pinned horizontal track on desktop >= 768px) */}
         <Section04ProjectsPinned lenis={lenisReady} />
-
-        {/* Section 04: Skills (Vertical, 3 categorized rows) */}
         <SkillsSection />
-
-        {/* Section 05: Certifications & Competitions (Vertical, 2 columns) */}
         <CredentialsSection />
-
-        {/* Section 06: Contact (Vertical, direct email copy + links) */}
         <ContactSection />
       </main>
 
-      {/* Minimal Footer */}
+      {/* Footer */}
       <footer className="w-full py-8 px-6 border-t border-[#232329] bg-[#0B0B0D]">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#9A9AA4]">
           <p>© 2026 Allan K. J. All rights reserved.</p>
-          <p>Karunya Institute of Technology & Sciences</p>
+          <p>Karunya Institute of Technology &amp; Sciences</p>
         </div>
       </footer>
     </div>

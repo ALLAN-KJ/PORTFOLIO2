@@ -134,6 +134,25 @@
   color: #0B0B0D;
 }
 
+/* Terminal scrollbar (thin, within MacTerminal) */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #232329;
+  border-radius: 2px;
+}
+
+/* GSAP reveal base state — elements start invisible before JS runs */
+.reveal-heading,
+.reveal-card,
+.reveal-section {
+  /* JS sets opacity via fromTo; no CSS opacity needed here */
+}
+
 /* Accessible Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   * {

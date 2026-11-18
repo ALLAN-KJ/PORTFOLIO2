@@ -31,9 +31,9 @@ const EXPERIENCES = [
 
 export default function ExperienceSection() {
   return (
-    <section id="experience" className="w-full py-20 px-6 md:px-12 max-w-7xl mx-auto">
+    <section id="experience" className="reveal-section w-full py-20 px-6 md:px-12 max-w-7xl mx-auto">
       <div className="flex flex-col gap-6">
-        <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#F4F4F6]">
+        <h2 className="reveal-heading font-display text-2xl sm:text-3xl font-bold text-[#F4F4F6]">
           Experience
         </h2>
 
@@ -41,7 +41,7 @@ export default function ExperienceSection() {
           {EXPERIENCES.map((exp) => (
             <div
               key={exp.company}
-              className="studio-card p-6 flex flex-col justify-between gap-4"
+              className="reveal-card studio-card p-6 flex flex-col justify-between gap-4 hover:border-[#363640] transition-colors duration-300"
             >
               <div className="flex flex-col gap-2">
                 <div className="flex flex-col">
@@ -66,4 +66,3 @@ export default function ExperienceSection() {
     </section>
   );
 }
-

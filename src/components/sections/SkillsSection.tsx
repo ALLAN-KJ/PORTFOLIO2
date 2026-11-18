@@ -19,9 +19,9 @@ const SKILL_GROUPS = [
 
 export default function SkillsSection() {
   return (
-    <section id="skills" className="w-full py-20 px-6 md:px-12 max-w-7xl mx-auto">
+    <section id="skills" className="reveal-section w-full py-20 px-6 md:px-12 max-w-7xl mx-auto">
       <div className="flex flex-col gap-6">
-        <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#F4F4F6]">
+        <h2 className="reveal-heading font-display text-2xl sm:text-3xl font-bold text-[#F4F4F6]">
           Skills
         </h2>
 
@@ -29,7 +29,7 @@ export default function SkillsSection() {
           {SKILL_GROUPS.map((group) => (
             <div
               key={group.category}
-              className="studio-card p-6 flex flex-col md:flex-row md:items-center justify-between gap-4"
+              className="reveal-card studio-card p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-[#363640] transition-colors duration-300"
             >
               <span className="text-sm font-mono font-medium text-[#F4F4F6] shrink-0 w-44">
                 {group.category}
@@ -39,7 +39,7 @@ export default function SkillsSection() {
                 {group.items.map((item) => (
                   <span
                     key={item}
-                    className="px-3 py-1.5 rounded bg-[#18181D] border border-[#232329] text-xs font-mono text-[#F4F4F6]"
+                    className="px-3 py-1.5 rounded bg-[#18181D] border border-[#232329] text-xs font-mono text-[#F4F4F6] hover:border-[#363640] transition-colors duration-200"
                   >
                     {item}
                   </span>
@@ -52,4 +52,3 @@ export default function SkillsSection() {
     </section>
   );
 }
-
